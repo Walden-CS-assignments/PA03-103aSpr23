@@ -36,6 +36,7 @@ could be replaced with PostgreSQL or Pandas or straight python lists
 from transaction import Transaction
 import sys
 import datetime
+import os
 
 
 # here are some helper functions ...
@@ -46,34 +47,56 @@ import datetime
 
 def print_usage():
     ''' print an explanation of how to use this command '''
-    print('''usage:
-            quit
-            show_transactions
-            add_transaction
-            delete_transaction
-            summarize_transactions_by_date
-            summarize_transactions_by_month
-            summarize_transactions_by_year
-            summarize_transactions_by_category
-            print_this_menu
+    print('''Enter your command and arguments (if any):
+            [1] quit
+            [2] show_transactions
+            [3] add_transaction [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]
+            [4] delete_transaction [YOUR_ITEM]
+            [5] summarize_transactions by date
+            [6] summarize_transactions by month
+            [7] summarize_transactions by year
+            [8] summarize_transactions by category
+            [9] print_this_menu
             '''
-            )
+        )
+
+# def print_transactions(transactions):
+#     ''' print the transactions items '''
+#     if not transactions:
+#         print('no transactions to print')
+#         return
+#     print('\n')
+#     if transactions[0] != '[1] quit':   # if called method is print_this_menu(), ignore table header
+#         print("%-10s %-10s %-20s %-20s %-30s"%('item','amount','category','date','description'))
+#     print('-'*40)
+#     for item in transactions:
+#         if isinstance(item, str):
+#             print(item)
+#         else:
+#             values = tuple(item.values()) #(item #,amount,category,date,description)
+#             print("%-10s %-10s %-20s %-20s %-30s"%values)
+
 
 def print_transactions(transactions):
     ''' print the transactions items '''
-    if len(transactions)==0:
-        print('no tasks to print')
+    if not transactions:
+        print('no transactions to print')
         return
     print('\n')
-    print("%-10s %-10s %-20s %-20s %-30s"%('item #','amount','category','date','description'))
-    print('-'*40)
+    if transactions[0] != '[1] quit':   # if called method is print_this_menu(), ignore table header
+        print("%-10s %-10s %-20s %-20s %-30s"%('item', 'amount', 'category', 'date', 'description'))
+    print('-'*75)
     for item in transactions:
-        values = tuple(item.values()) #(rowid,amount,category,date,description)
-        print("%-10s %-10s %-20s %-20s %-30s"%values)
+        if isinstance(item, str):
+            print(item)
+        else:
+            values = tuple(item.values()) #(item, amount, category, date, description)
+            print("%-10s %-10s %-20s %-20s %-30s"%values)
 
 def process_args(arglist):
     ''' examine args and make appropriate calls to Transaction'''
-    transactions = Transaction('db')
+    # transaction = Transaction('transaction')
+    transaction = Transaction(os.getenv('HOME')+'/transaction.db')
     if arglist==[]:
         print_usage()
     elif arglist[0]=="show_transactions":
@@ -87,21 +110,18 @@ def process_args(arglist):
     elif arglist[0]=="summarize_transactions_by_category":
         print_transactions(transaction.summarize_transactions_by_category())
     elif arglist[0]=='add_transaction':
-        if len(arglist)!=4:
+        if len(arglist)!=5:
+            print('Invalid input for add_transaction')
             print_usage()
         else:
-            transaction = {'amount':arglist[1],'category':arglist[2],'date':datetime.datetime.now(), 'description': arglist[3]}
-            transactions.add(transaction)
-    # elif arglist[0]=='complete':
-    #     if len(arglist)!= 2:
-    #         print_usage()
-    #     else:
-    #         todolist.setComplete(arglist[1])
+            transaction.add_transaction(arglist[1], arglist[2], arglist[3], ' '.join(arglist[4:]))
+    elif arglist[0]=='print_this_menu':
+        print_transactions(transaction.print_this_menu())
     elif arglist[0]=='delete_transaction':
         if len(arglist)!= 2:
             print_usage()
         else:
-            transactions.delete(arglist[1]) # delete by id
+            transaction.delete(arglist[1]) # delete by id
     elif arglist[0]=='quit':
         return
     else:
@@ -121,14 +141,14 @@ def toplevel():
             if args[0]=='add':
                 # join everyting after the name as a string
                 # args = ['add',args[1]," ".join(args[2:])]
-                args = ['add',args[1],args[2],args[3:]]
+                args = ['add',args[1],args[2],args[3], args[4], ' '.join(args[4:])]
             process_args(args)
-            print('-'*40+'\n'*3)
+            print('-'*75+'\n'*3)
     else:
         # read the args and process them
         args = sys.argv[1:]
         process_args(args)
-        print('-'*40+'\n'*3)
+        print('-'*75+'\n'*3)
 
 toplevel()
 

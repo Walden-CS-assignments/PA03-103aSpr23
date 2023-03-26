@@ -1,16 +1,17 @@
 '''
 transaction.py is an Object Relational Mapping to the transaction database
 
-The ORM will work map SQL rows with the schema
-    (rowid,title,desc,completed)
 to Python Dictionaries as follows:
 
-(5,'commute','drive to work',false) <-->
-{rowid:5,title:'commute',desc:'drive to work',completed:false)
+'item #',
+'amount',
+'category',
+'date',
+'description'
 
 In place of SQL queries, we will have method calls.
 
-This app will store the data in a SQLite database ~/todo.db
+This app will store the data in a SQLite database ~/transaction.db
 
 '''
 import sqlite3
@@ -19,24 +20,41 @@ import os
 def toDict(t):
     ''' t is a tuple (rowid,title, desc,completed)'''
     print('t='+str(t))
-    transactions = {'rowid':t[0], 'title':t[1], 'desc':t[2], 'completed':t[3]}
+    transactions = {'item':t[0], 'amount':t[1], 'category':t[2], 'date':t[3], 'description':t[4]}
+    # transactions = {'amount':t[0], 'category':t[1], 'date':t[2], 'description':t[3]}
     return transactions
 
 class Transaction():
     def __init__(self, dbname):
-        self.runQuery("CREATE TABLE IF NOT EXISTS transactions (amount int, category text, date text, description text)",())
+        self.dbname = dbname
+        self.runQuery(
+        '''
+        CREATE TABLE IF NOT EXISTS transactions (
+            item INTEGER PRIMARY KEY AUTOINCREMENT,
+            amount INTEGER,
+            category TEXT,
+            date TEXT,
+            description TEXT
+        );
+        ''',
+        ())
         
     def show_transactions(self):
         '''return all the transactions inside the table'''
         return self.runQuery("SELECT * FROM transactions", ())
     
-    def add_transaction(self,rowid, title, desc, completed):
+    def add_transaction(self, amount, category, date, description):
         '''insert new transactions into the table'''
-        return self.runQuery("INSERT INTO transactions (rowid, title, desc, completed) VALUES (?, ?, ?, ?)", (rowid, title, desc, completed))
+        return self.runQuery("INSERT INTO transactions (amount, category, date, description) VALUES (?, ?, ?, ?)", (amount, category, date, description))
+
+
+    # def add_transaction(self,  amount, category, date, description):
+    #     '''insert new transactions into the table'''
+    #     return self.runQuery("INSERT INTO transactions (amount, category, date, description) VALUES (?, ?, ?, ?)", (amount, category, date, description))
     
-    def delete_transaction(self, rowid):
+    def delete_transaction(self, item):
         '''delete a transaction of the table'''
-        return self.runQuery("DELETE FROM transactions WHERE rowid=(?)", (rowid,)) 
+        return self.runQuery("DELETE FROM transactions WHERE item = ?", (item,)) 
     
     def summarize_transactions_by_date(self):
         '''summarize the transactions by date'''
@@ -55,24 +73,22 @@ class Transaction():
         return self.runQuery("SELECT SUM(amount) FROM transactions GROUP BY category",())
     
     def print_this_menu(self):
-        print(
-            '''
-            0. quit
-            1. show transactions
-            2. add transaction
-            3. delete transaction
-            4. summarize transactions by date
-            5. summarize transactions by month
-            6. summarize transactions by year
-            7. summarize transactions by category
-            8. print this menu
-            '''
-        )
-        return 
+        return [
+            '[1] quit',
+            '[2] show_transactions',
+            '[3] add_transaction  [YOUR_ITEM] [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]',
+            '[4] delete_transaction [YOUR_ITEM]',
+            '[5] summarize_transactions by date',
+            '[6] summarize_transactions by month',
+            '[7] summarize_transactions by year',
+            '[8] summarize_transactions by category',
+            '[9] print_this_menu'
+        ]
+            
     
     def runQuery(self,query,tuple):
         ''' return all of the uncompleted tasks as a list of dicts.'''
-        con= sqlite3.connect(os.getenv('HOME')+'/todo.db')
+        con = sqlite3.connect(self.dbname)
         cur = con.cursor() 
         cur.execute(query,tuple)
         tuples = cur.fetchall()
