@@ -19,7 +19,6 @@ import sqlite3
 
 def to_dict(t):
     ''' t is a tuple (rowid, amount, category, date, description)'''
-    print('t='+str(t))
     transactions = {'rowid': t[0], 'amount': t[1],
                     'category': t[2], 'date': t[3], 'description': t[4]}
     return transactions
@@ -27,7 +26,6 @@ def to_dict(t):
 
 def summary_date_to_dict(t):
     ''' t is a tuple (rowid, amount, category, date, description), it is called when summarize by date is called'''
-    print('t='+str(t))
     transactions = {'date': t[0], 'amount': t[1]}
     return transactions
 
@@ -35,7 +33,6 @@ def summary_date_to_dict(t):
 def summary_category_to_dict(t):
     ''' t is a tuple (rowid, item, amount, category, date, description), it is called when summarize
       by category is called'''
-    print('t='+str(t))
     transactions = {'category': t[0], 'amount': t[1]}
     return transactions
 
@@ -140,3 +137,27 @@ class Transaction():
         con.commit()
         con.close()
         return [summary_category_to_dict(t) for t in tuples]
+
+
+tuples = [(5, "category1", "2021-03-01", "description1"), 
+            (6, "category2", "2021-03-01", "description2"),
+            (7, "category3", "2021-03-01", "description3"),
+            (7, "category1", "2021-03-02", "description1"),
+            (76, "category2", "2021-03-02", "description2"),
+            (24, "category3", "2021-03-02", "description3"),
+            (74, "category1", "2021-04-02", "description1"),
+            (6, "category2", "2021-04-02", "description2"),
+            (4, "category3", "2021-04-02", "description3"),
+            (55, "category1", "2022-04-02", "description1"),
+            (36, "category2", "2022-04-02", "description2"),
+            (46, "category3", "2022-04-02", "description3"),
+           ]
+con= sqlite3.connect("transaction.db")
+cur = con.cursor()
+cur.execute('''CREATE TABLE IF NOT EXISTS transactions (amount \
+        INTEGER, category TEXT, date TEXT, description TEXT)''')
+for i in range(len(tuples)):
+    cur.execute('''insert into transactions values(?,?,?,?)''',tuples[i])
+con.commit()
+tr = Transaction("transaction.db")
+print(tr.show_transactions())
