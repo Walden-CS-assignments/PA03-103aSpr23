@@ -28,7 +28,7 @@ class Transaction():
         
     def show_transactions(self):
         '''return all the transactions inside the table'''
-        return self.runQuery("SELECT * FROM transactions")
+        return self.runQuery("SELECT * FROM transactions", ())
     
     def add_transaction(self,title, desc, completed):
         '''insert new transactions into the table'''
