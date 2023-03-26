@@ -94,6 +94,52 @@ def print_transactions(transactions):
             # (item, amount, category, date, description)
             values = tuple(item.values())
             print("%-10s %-10s %-20s %-20s %-30s" % values)
+    
+    def print_transactions_by_date(transactions):
+    ''' print the transactions items '''
+    if not transactions:
+        print('no transactions to print')
+        return
+    print('\n')
+
+    # if called method is print_this_menu(), ignore table header
+    # if transactions[0] != '[1] quit':
+    #     print("%-10s %-10s %-20s %-20s %-30s" %
+    #           ('item', 'amount', 'category', 'date', 'description'))
+
+    print("%-20s %-10s" %
+        ('date', 'amount'))
+    print('-'*75)
+    for item in transactions:
+        if isinstance(item, str):
+            print(item)
+        else:
+            # (item, amount, category, date, description)
+            values = tuple(item.values())
+            print("%-20s %-10s" % values)
+    
+    def print_transactions_by_category(transactions):
+    ''' print the transactions items '''
+    if not transactions:
+        print('no transactions to print')
+        return
+    print('\n')
+
+    # if called method is print_this_menu(), ignore table header
+    # if transactions[0] != '[1] quit':
+    #     print("%-10s %-10s %-20s %-20s %-30s" %
+    #           ('item', 'amount', 'category', 'date', 'description'))
+
+    print("%-20s %-10s" %
+        ('date', 'amount'))
+    print('-'*75)
+    for item in transactions:
+        if isinstance(item, str):
+            print(item)
+        else:
+            # (item, amount, category, date, description)
+            values = tuple(item.values())
+            print("%-20s %-10s" % values)
 
 def process_args(arglist):
     ''' examine args and make appropriate calls to Transaction'''
