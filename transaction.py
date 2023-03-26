@@ -27,8 +27,8 @@ class Transaction():
         self.runQuery("CREATE TABLE IF NOT EXISTS (?)(amount int, category text, date text, description text)",(dbname, ))
         
     def show_transactions(self):
-       '''return all the transactions inside the table'''
-        return 
+        '''return all the transactions inside the table'''
+        return self.runQuery("SELECT * FROM transactions")
     
     def add_transaction(self,item):
        
