@@ -73,7 +73,7 @@ def print_transactions(transactions):
 
 def process_args(arglist):
     ''' examine args and make appropriate calls to Transaction'''
-    transactions = Transaction()
+    transactions = Transaction('db')
     if arglist==[]:
         print_usage()
     elif arglist[0]=="show_transactions":
@@ -102,6 +102,8 @@ def process_args(arglist):
             print_usage()
         else:
             transactions.delete(arglist[1]) # delete by id
+    elif arglist[0]=='quit':
+        return
     else:
         print(arglist,"is not implemented")
         print_usage()

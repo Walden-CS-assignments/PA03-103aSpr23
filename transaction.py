@@ -24,7 +24,7 @@ def toDict(t):
 
 class Transaction():
     def __init__(self, dbname):
-        self.runQuery("CREATE TABLE IF NOT EXISTS transactions (amount int, category text, date text, description text)",(dbname, ))
+        self.runQuery("CREATE TABLE IF NOT EXISTS transactions (amount int, category text, date text, description text)",())
         
     def show_transactions(self):
         '''return all the transactions inside the table'''
@@ -55,7 +55,19 @@ class Transaction():
         return self.runQuery("SELECT SUM(amount) FROM transactions GROUP BY category",())
     
     def print_this_menu(self):
-       
+        print(
+            '''
+            0. quit
+            1. show transactions
+            2. add transaction
+            3. delete transaction
+            4. summarize transactions by date
+            5. summarize transactions by month
+            6. summarize transactions by year
+            7. summarize transactions by category
+            8. print this menu
+            '''
+        )
         return 
     
     def runQuery(self,query,tuple):
