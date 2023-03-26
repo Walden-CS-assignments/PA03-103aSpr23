@@ -19,7 +19,7 @@ class Transaction():
     #     return 
 
     def show_transactions(self):
-       
+       '''return all the transactions inside the table'''
         return 
     
     def add_transaction(self,item):
