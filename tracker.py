@@ -1,36 +1,6 @@
 #! /opt/miniconda3/bin/python3
 '''
-tracker is an app that maintains a todo list
-just as with the todo code in this folder.
-
-but it also uses an Object Relational Mapping (ORM)
-to abstract out the database operations from the
-UI/UX code.
-
-The ORM, TodoList, will map SQL rows with the schema
-    (rowid,title,desc,completed)
-to Python Dictionaries as follows:
-
-(5,'commute','drive to work',false) <-->
-
-{rowid:5,
- title:'commute',
- desc:'drive to work',
- completed:false)
- }
-
-In place of SQL queries, we will have method calls.
-
-This app will store the data in a SQLite database ~/todo.db
-
-Recall that sys.argv is a list of strings capturing the
-command line invocation of this program
-sys.argv[0] is the name of the script invoked from the shell
-sys.argv[1:] is the rest of the arguments (after arg expansion!)
-
-Note the actual implementation of the ORM is hidden and so it 
-could be replaced with PostgreSQL or Pandas or straight python lists
-
+This is a simple command line app to track your transactions.
 '''
 
 from transaction import Transaction
@@ -40,10 +10,6 @@ import os
 
 
 # here are some helper functions ...
-
-  # todo show categories
-    # todo add category
-# todo modify category
 
 def print_usage():
     ''' print an explanation of how to use this command '''
@@ -59,22 +25,6 @@ def print_usage():
             [9] print_this_menu
             '''
         )
-
-# def print_transactions(transactions):
-#     ''' print the transactions items '''
-#     if not transactions:
-#         print('no transactions to print')
-#         return
-#     print('\n')
-#     if transactions[0] != '[1] quit':   # if called method is print_this_menu(), ignore table header
-#         print("%-10s %-10s %-20s %-20s %-30s"%('item','amount','category','date','description'))
-#     print('-'*40)
-#     for item in transactions:
-#         if isinstance(item, str):
-#             print(item)
-#         else:
-#             values = tuple(item.values()) #(item #,amount,category,date,description)
-#             print("%-10s %-10s %-20s %-20s %-30s"%values)
 
 
 def print_transactions(transactions):
@@ -121,7 +71,7 @@ def process_args(arglist):
         if len(arglist)!= 2:
             print_usage()
         else:
-            transaction.delete(arglist[1]) # delete by id
+            transaction.delete_transaction(arglist[1]) # delete by id
     elif arglist[0]=='quit':
         return
     else:

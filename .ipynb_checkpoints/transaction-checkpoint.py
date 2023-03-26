@@ -20,10 +20,10 @@ import datetime
 
 
 def to_dict(t):
-    ''' t is a tuple (rowid, item, amount, category, date, description)'''
+    ''' t is a tuple (item, amount, category, date, description)'''
     print('t='+str(t))
-    transactions = {'rowid': t[0], 'item': t[1], 'amount': t[2],
-                    'category': t[3], 'date': t[4], 'description': t[5]}
+    transactions = {'item': t[0], 'amount': t[1],
+                    'category': t[2], 'date': t[3], 'description': t[4]}
     return transactions
 
 
@@ -36,7 +36,7 @@ class Transaction():
         self.dbname = dbname
         self.runQuery(
             '''
-        CREATE TABLE IF NOT EXISTS data (
+        CREATE TABLE IF NOT EXISTS transactions (
             item TEXT,
             amount INTEGER,
             category TEXT,
@@ -48,31 +48,31 @@ class Transaction():
 
     def show_transactions(self):
         '''return all the transactions inside the table'''
-        return self.runQuery("SELECT rowid, * FROM data", ())
+        return self.runQuery("SELECT * FROM transactions", ())
 
-    def add_transaction(self, item):
+    def add_transaction(self, item_name, amount, category, date, description):
         '''insert new transactions into the table'''
-        return self.runQuery("INSERT INTO data (item, amount, category, date, description) VALUES (?, ?, ?, ?, ?)", (item['item'], item['amount'], item['category'], item['date'], item['description']))
+        return self.runQuery("INSERT INTO transactions (item_name, amount, category, date, description) VALUES (?, ?, ?, ?)", (amount, category, date, description))
 
-    def delete_transaction(self, rowid):
+    def delete_transaction(self, item):
         '''delete a transaction of the table'''
-        return self.runQuery("DELETE FROM data WHERE rowid = ?", (rowid,))
+        return self.runQuery("DELETE FROM transactions WHERE item = ?", (item,))
 
-    def summarize_transactions_by_date(self, date):
+    def summarize_transactions_by_date(self):
         '''summarize the transactions by date'''
-        return self.runQuery("SELECT rowid, * FROM data WHERE date = ?", (date,))
+        return self.runQuery("SELECT date, SUM(amount) FROM transactions GROUP BY date", ())
 
-    def summarize_transactions_by_month(self, month):
+    def summarize_transactions_by_month(self):
         '''summarize the transactions by month'''
-        return self.runQuery("SELECT rowid, * FROM data WHERE strftime('%Y-%m', date(date)) = ?", (month,))
+        return self.runQuery("SELECT SUM(amount) FROM transactions GROUP BY EXTRACT(MONTH FROM date)", ())
 
-    def summarize_transactions_by_year(self, year):
+    def summarize_transactions_by_year(self):
         '''summarize the transactions by year'''
-        return self.runQuery("SELECT rowid, * FROM data WHERE strftime('%Y', date(date)) = ?", (year,))
+        return self.runQuery("SELECT SUM(amount) FROM transactions GROUP BY EXTRACT(YEAR FROM date)", ())
 
-    def summarize_transactions_by_category(self, category):
+    def summarize_transactions_by_category(self):
         '''summarize the transactions by category'''
-        return self.runQuery("SELECT rowid, * FROM data WHERE category = ?", (category,))
+        return self.runQuery("SELECT SUM(amount) FROM transactions GROUP BY category", ())
 
     def print_this_menu(self):
         return [
@@ -95,7 +95,7 @@ class Transaction():
         tuples = cur.fetchall()
         con.commit()
         con.close()
-        return tuples_to_dicts(tuples)
+        return [to_dict(t) for t in tuples]
 
 
 
@@ -113,16 +113,12 @@ tuples = [("item1", 5, "category1", "2021-03-01", "description1"),
             ("item2", 36, "category2", "2022-04-02", "description2"),
             ("item3", 46, "category3", "2022-04-02", "description3"),
            ]
-transaction_path = 'transaction.db'
+transaction_path = os.path.join(os.path.dirname(__file__), 'transaction.db')
 con = sqlite3.connect(transaction_path)
 cur = con.cursor()
-cur.execute('''DROP TABLE IF EXISTS data''')
-cur.execute('''CREATE TABLE IF NOT EXISTS data (item TEXT, amount INTEGER, category TEXT, date TEXT, description TEXT)''')
+cur.execute('''CREATE TABLE IF NOT EXISTS transaction (item TEXT, amount INTEGER, category TEXT, date TEXT, description TEXT)''')
 for i in range(len(tuples)):
-    cur.execute('''insert into data values(?,?,?,?,?)''', tuples[i])
+    cur.execute('''insert into transaction values(?,?,?,?,?)''', tuples[i])
+    # create the transaction database
 con.commit()
-res = cur.execute('''SELECT * FROM data''')
 tr = Transaction(transaction_path)
-# print(tr.show_transactions())
-print(tr.summarize_transactions_by_date("2021-03-01"))
-# print(tuples_to_dicts([(i+1,)+tuples[i] for i in range(len(tuples))]))
