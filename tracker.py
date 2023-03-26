@@ -16,7 +16,7 @@ def print_usage():
     print('''Enter your command and arguments (if any):
             [1] quit
             [2] show_transactions
-            [3] add_transaction [AMOUNT] [CATEGORY] [DESCRIPTION]
+            [3] add_transaction [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]
             [4] delete_transaction [YOUR_ITEM]
             [5] summarize_transactions by date
             [6] summarize_transactions by month
@@ -34,13 +34,13 @@ def print_transactions(transactions):
         return
     print('\n')
     if transactions[0] != '[1] quit':   # if called method is print_this_menu(), ignore table header
-        print("%-10s %-10s %-20s %-20s %-30s"%('item', 'amount', 'category', 'date', 'description'))
+        print("%-10s %-10s %-20s %-20s %-30s"%('rowid', 'amount', 'category', 'date', 'description'))
     print('-'*75)
     for item in transactions:
         if isinstance(item, str):
             print(item)
         else:
-            values = tuple(item.values()) #(item, amount, category, date, description)
+            values = tuple(item.values()) #(rowid, amount, category, date, description)
             print("%-10s %-10s %-20s %-20s %-30s"%values)
 
 def process_args(arglist):
@@ -60,11 +60,11 @@ def process_args(arglist):
     elif arglist[0]=="summarize_transactions_by_category":
         print_transactions(transaction.summarize_transactions_by_category())
     elif arglist[0]=='add_transaction':
-        if len(arglist)!=4:
+        if len(arglist)!=5:
             print('Invalid input for add_transaction')
             print_usage()
         else:
-            transaction.add_transaction(arglist[1], arglist[2], ' '.join(arglist[3:]))
+            transaction.add_transaction({'amount':arglist[1], 'category':arglist[2], 'date':arglist[3], 'description':arglist[4]})
     elif arglist[0]=='print_this_menu':
         print_transactions(transaction.print_this_menu())
     elif arglist[0]=='delete_transaction':
@@ -91,7 +91,7 @@ def toplevel():
             if args[0]=='add':
                 # join everyting after the name as a string
                 # args = ['add',args[1]," ".join(args[2:])]
-                args = ['add',args[1],args[2],args[3], ' '.join(args[3:])]
+                args = ['add_transaction',args[1],args[2],args[3], ' '.join(args[3:])]
             process_args(args)
             print('-'*75+'\n'*3)
     else:
