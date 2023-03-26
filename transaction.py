@@ -15,8 +15,7 @@ This app will store the data in a SQLite database ~/transaction.db
 
 '''
 import sqlite3
-import os
-import datetime
+
 def toDict(t):
     ''' t is a tuple (rowid,title, desc,completed)'''
     print('t='+str(t))
@@ -43,9 +42,9 @@ class Transaction():
         '''return all the transactions inside the table'''
         return self.runQuery("SELECT * FROM transactions", ())
     
-    def add_transaction(self, amount, category, description):
+    def add_transaction(self, amount, category, date, description):
         '''insert new transactions into the table'''
-        return self.runQuery("INSERT INTO transactions (amount, category, date, description) VALUES (?, ?, ?, ?)", (amount, category, datetime.date.today(), description))
+        return self.runQuery("INSERT INTO transactions (amount, category, date, description) VALUES (?, ?, ?, ?)", (amount, category, date, description))
 
 
     # def add_transaction(self,  amount, category, date, description):
