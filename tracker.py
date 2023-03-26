@@ -50,7 +50,7 @@ def print_usage():
     print('''Enter your command and arguments (if any):
             [1] quit
             [2] show_transactions
-            [3] add_transaction [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]
+            [3] add_transaction [AMOUNT] [CATEGORY] [DESCRIPTION]
             [4] delete_transaction [YOUR_ITEM]
             [5] summarize_transactions by date
             [6] summarize_transactions by month
@@ -110,11 +110,11 @@ def process_args(arglist):
     elif arglist[0]=="summarize_transactions_by_category":
         print_transactions(transaction.summarize_transactions_by_category())
     elif arglist[0]=='add_transaction':
-        if len(arglist)!=5:
+        if len(arglist)!=4:
             print('Invalid input for add_transaction')
             print_usage()
         else:
-            transaction.add_transaction(arglist[1], arglist[2], arglist[3], ' '.join(arglist[4:]))
+            transaction.add_transaction(arglist[1], arglist[2], ' '.join(arglist[3:]))
     elif arglist[0]=='print_this_menu':
         print_transactions(transaction.print_this_menu())
     elif arglist[0]=='delete_transaction':
@@ -141,7 +141,7 @@ def toplevel():
             if args[0]=='add':
                 # join everyting after the name as a string
                 # args = ['add',args[1]," ".join(args[2:])]
-                args = ['add',args[1],args[2],args[3], args[4], ' '.join(args[4:])]
+                args = ['add',args[1],args[2],args[3], ' '.join(args[3:])]
             process_args(args)
             print('-'*75+'\n'*3)
     else:
