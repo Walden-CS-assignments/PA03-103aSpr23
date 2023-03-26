@@ -30,9 +30,9 @@ class Transaction():
         '''return all the transactions inside the table'''
         return self.runQuery("SELECT * FROM transactions", ())
     
-    def add_transaction(self,title, desc, completed):
+    def add_transaction(self,rowid, title, desc, completed):
         '''insert new transactions into the table'''
-        return self.runQuery("INSERT INTO transactions (title, desc, completed) VALUES (?, ?, ?)", (title, desc, completed))
+        return self.runQuery("INSERT INTO transactions (rowid, title, desc, completed) VALUES (?, ?, ?, ?)", (rowid, title, desc, completed))
     
     def delete_transaction(self, rowid):
         '''delete a transaction of the table'''
