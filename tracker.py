@@ -78,10 +78,14 @@ def print_transactions(transactions):
         print('no transactions to print')
         return
     print('\n')
+
     # if called method is print_this_menu(), ignore table header
-    if transactions[0] != '[1] quit':
-        print("%-10s %-10s %-20s %-20s %-30s" %
-              ('item', 'amount', 'category', 'date', 'description'))
+    # if transactions[0] != '[1] quit':
+    #     print("%-10s %-10s %-20s %-20s %-30s" %
+    #           ('item', 'amount', 'category', 'date', 'description'))
+
+    print("%-10s %-10s %-20s %-20s %-30s" %
+        ('item', 'amount', 'category', 'date', 'description'))
     print('-'*75)
     for item in transactions:
         if isinstance(item, str):
@@ -90,7 +94,6 @@ def print_transactions(transactions):
             # (item, amount, category, date, description)
             values = tuple(item.values())
             print("%-10s %-10s %-20s %-20s %-30s" % values)
-
 
 def process_args(arglist):
     ''' examine args and make appropriate calls to Transaction'''
@@ -138,10 +141,10 @@ def toplevel():
         args = []
         while args != ['']:
             args = input("command> ").split(' ')
-            if args[0] == 'add':
+            if args[0] == 'add_transaction':
                 # join everyting after the name as a string
                 # args = ['add',args[1]," ".join(args[2:])]
-                args = ['add', args[1], args[2], args[3], ' '.join(args[3:])]
+                args = ['add_transaction', args[1], args[2], args[3], ' '.join(args[4:])]
             process_args(args)
             print('-'*75+'\n'*3)
     else:
