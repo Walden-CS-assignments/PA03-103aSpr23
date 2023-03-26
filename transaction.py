@@ -19,24 +19,24 @@ import os
 def toDict(t):
     ''' t is a tuple (rowid,title, desc,completed)'''
     print('t='+str(t))
-    todo = {'rowid':t[0], 'title':t[1], 'desc':t[2], 'completed':t[3]}
-    return todo
+    transactions = {'rowid':t[0], 'title':t[1], 'desc':t[2], 'completed':t[3]}
+    return transactions
 
 class Transaction():
     def __init__(self, dbname):
-        self.runQuery("CREATE TABLE IF NOT EXISTS (?)(amount int, category text, date text, description text)",(dbname, ))
+        self.runQuery("CREATE TABLE IF NOT EXISTS transactions (amount int, category text, date text, description text)",(dbname, ))
         
     def show_transactions(self):
         '''return all the transactions inside the table'''
         return self.runQuery("SELECT * FROM transactions")
     
-    def add_transaction(self,item):
-       
-        return 
+    def add_transaction(self,title, desc, completed):
+        '''insert new transactions into the table'''
+        return self.runQuery("INSERT INTO transactions (title, desc, completed) VALUES (?, ?, ?)", (title, desc, completed))
     
-    def delete_transaction(self):
-       
-        return 
+    def delete_transaction(self, rowid):
+        '''delete a transaction of the table'''
+        return self.runQuery("DELETE FROM transactions WHERE rowid=(?)", (rowid,)) 
     
     def summarize_transactions_by_date(self):
         '''summarize the transactions by date'''
