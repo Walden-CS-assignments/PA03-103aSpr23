@@ -87,7 +87,7 @@ def process_args(arglist):
             transaction.add_transaction({'amount':arglist[1], 'category':arglist[2]\
                                          , 'date':arglist[3], 'description':arglist[4]})
     elif arglist[0]=='print_this_menu':
-        print_transactions(transaction.print_this_menu())
+        print_usage()
     elif arglist[0]=='delete_transaction':
         if len(arglist)!= 2:
             print_usage()

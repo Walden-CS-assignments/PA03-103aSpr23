@@ -17,29 +17,30 @@ This app will store the data in a SQLite database ~/transaction.db
 import sqlite3
 
 
-def to_dict(t):
+def to_dict(tup):
     ''' t is a tuple (rowid, amount, category, date, description)'''
-    transactions = {'rowid': t[0], 'amount': t[1],
-                    'category': t[2], 'date': t[3], 'description': t[4]}
+    transactions = {'rowid': tup[0], 'amount': tup[1],
+                    'category': tup[2], 'date': tup[3], 'description': tup[4]}
     return transactions
 
 
-def summary_date_to_dict(t):
-    ''' t is a tuple (rowid, amount, category, date, description), it is called when summarize by date is called'''
-    transactions = {'date': t[0], 'amount': t[1]}
+def summary_date_to_dict(tup):
+    ''' t is a tuple (rowid, amount, category, date, description), \
+        it is called when summarize by date is called'''
+    transactions = {'date': tup[0], 'amount': tup[1]}
     return transactions
 
 
-def summary_category_to_dict(t):
+def summary_category_to_dict(tup):
     ''' t is a tuple (rowid, item, amount, category, date, description), it is called when summarize
       by category is called'''
-    transactions = {'category': t[0], 'amount': t[1]}
+    transactions = {'category': tup[0], 'amount': tup[1]}
     return transactions
 
 
-def tuples_to_dicts(ts):
+def tuples_to_dicts(tuples):
     ''' ts is a list of tuples, convert to list of dicts '''
-    return [to_dict(t) for t in ts]
+    return [to_dict(tup) for tup in tuples]
 
 
 class Transaction():
@@ -112,36 +113,34 @@ class Transaction():
             '[9] print_this_menu'
         ]
 
-    def run_query(self, query, tuple):
+    def run_query(self, query, tup):
         ''' return all of the transactions as a list of dicts.'''
         con = sqlite3.connect(self.dbname)
         cur = con.cursor()
-        cur.execute(query, tuple)
+        cur.execute(query, tup)
         tuples = cur.fetchall()
         con.commit()
         con.close()
         return tuples_to_dicts(tuples)
 
-    def run_summary_date_query(self, query, tuple):
+    def run_summary_date_query(self, query, tup):
         ''' return all of the transactions as a list of dicts.
             author: Haipeng Zhu'''
         con = sqlite3.connect(self.dbname)
         cur = con.cursor()
-        cur.execute(query, tuple)
+        cur.execute(query, tup)
         tuples = cur.fetchall()
         con.commit()
         con.close()
         return [summary_date_to_dict(t) for t in tuples]
 
-    def run_summary_category_query(self, query, tuple):
+    def run_summary_category_query(self, query, tup):
         ''' return all of the transactions as a list of dicts.
             author: Haipeng Zhu'''
         con = sqlite3.connect(self.dbname)
         cur = con.cursor()
-        cur.execute(query, tuple)
+        cur.execute(query, tup)
         tuples = cur.fetchall()
         con.commit()
         con.close()
         return [summary_category_to_dict(t) for t in tuples]
-
-
