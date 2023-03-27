@@ -44,7 +44,8 @@ def tuples_to_dicts(tuples):
 
 
 class Transaction():
-    ''' Transaction is an Object Relational Mapping to the transaction database '''
+    ''' Transaction is an Object Relational Mapping to the transaction database 
+        Author: Hang Yu'''
     def __init__(self, dbname):
         self.dbname = dbname
         self.run_query(
@@ -99,7 +100,8 @@ class Transaction():
                                                FROM transactions GROUP BY category", ())
 
     def print_this_menu(self):
-        '''print the menu'''
+        '''print the menu
+            Author: Hang Yu'''
         return [
             '[1] quit',
             '[2] show_transactions',
