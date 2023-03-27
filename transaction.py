@@ -18,7 +18,8 @@ import sqlite3
 
 
 def to_dict(tup):
-    ''' t is a tuple (rowid, amount, category, date, description)'''
+    ''' t is a tuple (rowid, amount, category, date, description)
+        author: Haipeng Zhu'''
     transactions = {'rowid': tup[0], 'amount': tup[1],
                     'category': tup[2], 'date': tup[3], 'description': tup[4]}
     return transactions
@@ -26,20 +27,23 @@ def to_dict(tup):
 
 def summary_date_to_dict(tup):
     ''' t is a tuple (rowid, amount, category, date, description), \
-        it is called when summarize by date is called'''
+        it is called when summarize by date is called
+        author: Haipeng Zhu'''
     transactions = {'date': tup[0], 'amount': tup[1]}
     return transactions
 
 
 def summary_category_to_dict(tup):
     ''' t is a tuple (rowid, item, amount, category, date, description), it is called when summarize
-      by category is called'''
+      by category is called
+      author: Haipeng Zhu'''
     transactions = {'category': tup[0], 'amount': tup[1]}
     return transactions
 
 
 def tuples_to_dicts(tuples):
-    ''' ts is a list of tuples, convert to list of dicts '''
+    ''' ts is a list of tuples, convert to list of dicts 
+        author: Haipeng Zhu'''
     return [to_dict(tup) for tup in tuples]
 
 
