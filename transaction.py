@@ -64,6 +64,7 @@ class Transaction():
     def show_transactions(self):
         '''return all the transactions inside the table'''
         return self.run_query("SELECT rowid, * FROM transactions", ())
+      
 
     def add_transaction(self, item):
         '''insert new transactions into the table'''
@@ -102,7 +103,7 @@ class Transaction():
         return [
             '[1] quit',
             '[2] show_transactions',
-            '[3] add_transaction [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]',
+            '[3] add_transaction [AMOUNT] [CATEGORY] [DATE(e.g. 2021-03-02)] [DESCRIPTION]',
             '[4] delete_transaction [rowid]',
             '[5] summarize_transactions by date',
             '[6] summarize_transactions by month',

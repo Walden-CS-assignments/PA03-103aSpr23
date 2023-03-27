@@ -5,7 +5,6 @@ This is a simple command line app to track your transactions.
 
 from transaction import Transaction
 import sys
-import datetime
 import os
 
 
@@ -16,12 +15,12 @@ def print_usage():
     print('''Enter your command and arguments (if any):
             [1] quit
             [2] show_transactions
-            [3] add_transaction [AMOUNT] [CATEGORY] [DATE] [DESCRIPTION]
+            [3] add_transaction [AMOUNT] [CATEGORY] [DATE(e.g. 2021-03-02)] [DESCRIPTION]
             [4] delete_transaction [YOUR_ITEM]
-            [5] summarize_transactions by date
-            [6] summarize_transactions by month
-            [7] summarize_transactions by year
-            [8] summarize_transactions by category
+            [5] summarize_transactions_by_date
+            [6] summarize_transactions_by_month
+            [7] summarize_transactions_by_year
+            [8] summarize_transactions_by_category
             [9] print_this_menu
             '''
         )
@@ -42,6 +41,31 @@ def print_transactions(transactions):
         else:
             values = tuple(item.values()) #(rowid, amount, category, date, description)
             print("%-10s %-10s %-20s %-20s %-30s"%values)
+            
+
+def print_transactions_by_date(transactions):
+    ''' print the todo items '''
+    if len(transactions)==0:
+        print('no transactions to print')
+        return
+    print('\n')
+    print("%-20s %-10s"%('date','amount'))
+    print('-'*40)
+    for item in transactions:
+        values = tuple(item.values()) #(date, amount)
+        print("%-20s %-10s"%values)
+
+def print_transactions_by_category(transactions):
+    ''' print the todo items '''
+    if len(transactions)==0:
+        print('no transactions to print')
+        return
+    print('\n')
+    print("%-20s %-10s"%('category','amount'))
+    print('-'*40)
+    for item in transactions:
+        values = tuple(item.values()) #(category, amount)
+        print("%-20s %-10s"%values)
 
 def process_args(arglist):
     ''' examine args and make appropriate calls to Transaction'''
@@ -52,13 +76,13 @@ def process_args(arglist):
     elif arglist[0]=="show_transactions":
         print_transactions(transaction.show_transactions())
     elif arglist[0]=="summarize_transactions_by_date":
-        print_transactions(transaction.summarize_transactions_by_date())
+        print_transactions_by_date(transaction.summarize_transactions_by_date())
     elif arglist[0]=="summarize_transactions_by_month":
-        print_transactions(transaction.summarize_transactions_by_month())
+        print_transactions_by_date(transaction.summarize_transactions_by_month())
     elif arglist[0]=="summarize_transactions_by_year":
-        print_transactions(transaction.summarize_transactions_by_year())
+        print_transactions_by_date(transaction.summarize_transactions_by_year())
     elif arglist[0]=="summarize_transactions_by_category":
-        print_transactions(transaction.summarize_transactions_by_category())
+        print_transactions_by_category(transaction.summarize_transactions_by_category())
     elif arglist[0]=='add_transaction':
         if len(arglist)!=5:
             print('Invalid input for add_transaction')
@@ -88,9 +112,10 @@ def toplevel():
         args = []
         while args!=['']:
             args = input("command> ").split(' ')
-            if args[0]=='add':
-                # join everyting after the name as a string
-                # args = ['add',args[1]," ".join(args[2:])]
+            if args[0] == 'quit':
+                return
+            
+            if args[0]=='add_transaction':
                 args = ['add_transaction',args[1],args[2],args[3], ' '.join(args[3:])]
             process_args(args)
             print('-'*75+'\n'*3)
