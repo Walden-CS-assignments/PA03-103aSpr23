@@ -41,7 +41,8 @@ def transaction_path(tmp_path):
 
 @pytest.fixture(autouse=True)
 def transaction(transaction_path,tuples):
-    "create and initialize the transaction.db database in /tmp "
+    '''create and initialize the transaction.db database in /tmp 
+    Author: Hang Yu'''
     con= sqlite3.connect(transaction_path)
     cur = con.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS transactions (amount \
@@ -55,7 +56,8 @@ def transaction(transaction_path,tuples):
     con.commit()
 
 def test_show_transactions(transaction,returned_dicts):
-    ''' test the show_transactions method'''
+    ''' test the show_transactions method
+        Author: Hang Yu'''
     tr = transaction
     results = tr.show_transactions()
     expected = returned_dicts
