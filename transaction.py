@@ -73,24 +73,28 @@ class Transaction():
         return self.run_query("DELETE FROM transactions WHERE rowid = ?", (rowid,))
 
     def summarize_transactions_by_date(self):
-        '''summarize the transactions by date'''
+        '''summarize the transactions by date
+            author: Haipeng Zhu'''
         return self.run_summary_date_query("SELECT date, SUM(amount)\
                                             FROM transactions GROUP BY date", ())
 
     def summarize_transactions_by_month(self):
-        '''summarize the transactions by month'''
+        '''summarize the transactions by month
+            author: Haipeng Zhu'''
         return self.run_summary_date_query("SELECT strftime('%Y-%m', date(date))\
                                            , SUM(amount) FROM transactions GROUP BY \
                                            strftime('%Y-%m', date(date))", ())
 
     def summarize_transactions_by_year(self):
-        '''summarize the transactions by year'''
+        '''summarize the transactions by year
+            author: Haipeng Zhu'''
         return self.run_summary_date_query("SELECT strftime('%Y', date(date)), \
                                            SUM(amount) FROM transactions GROUP BY \
                                            strftime('%Y', date(date))", ())
 
     def summarize_transactions_by_category(self):
-        '''summarize the transactions by category'''
+        '''summarize the transactions by category
+            author: Haipeng Zhu'''
         return self.run_summary_category_query("SELECT category, SUM(amount) \
                                                FROM transactions GROUP BY category", ())
 
@@ -119,7 +123,8 @@ class Transaction():
         return tuples_to_dicts(tuples)
 
     def run_summary_date_query(self, query, tuple):
-        ''' return all of the transactions as a list of dicts.'''
+        ''' return all of the transactions as a list of dicts.
+            author: Haipeng Zhu'''
         con = sqlite3.connect(self.dbname)
         cur = con.cursor()
         cur.execute(query, tuple)
@@ -129,7 +134,8 @@ class Transaction():
         return [summary_date_to_dict(t) for t in tuples]
 
     def run_summary_category_query(self, query, tuple):
-        ''' return all of the transactions as a list of dicts.'''
+        ''' return all of the transactions as a list of dicts.
+            author: Haipeng Zhu'''
         con = sqlite3.connect(self.dbname)
         cur = con.cursor()
         cur.execute(query, tuple)
@@ -139,25 +145,3 @@ class Transaction():
         return [summary_category_to_dict(t) for t in tuples]
 
 
-tuples = [(5, "category1", "2021-03-01", "description1"), 
-            (6, "category2", "2021-03-01", "description2"),
-            (7, "category3", "2021-03-01", "description3"),
-            (7, "category1", "2021-03-02", "description1"),
-            (76, "category2", "2021-03-02", "description2"),
-            (24, "category3", "2021-03-02", "description3"),
-            (74, "category1", "2021-04-02", "description1"),
-            (6, "category2", "2021-04-02", "description2"),
-            (4, "category3", "2021-04-02", "description3"),
-            (55, "category1", "2022-04-02", "description1"),
-            (36, "category2", "2022-04-02", "description2"),
-            (46, "category3", "2022-04-02", "description3"),
-           ]
-con= sqlite3.connect("transaction.db")
-cur = con.cursor()
-cur.execute('''CREATE TABLE IF NOT EXISTS transactions (amount \
-        INTEGER, category TEXT, date TEXT, description TEXT)''')
-for i in range(len(tuples)):
-    cur.execute('''insert into transactions values(?,?,?,?)''',tuples[i])
-con.commit()
-tr = Transaction("transaction.db")
-print(tr.show_transactions())

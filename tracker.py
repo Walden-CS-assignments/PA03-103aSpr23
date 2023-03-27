@@ -2,9 +2,7 @@
 '''
 This is a simple command line app to track your transactions.
 '''
-import sys
 import os
-import datetime
 from transaction import Transaction
 
 
@@ -40,7 +38,8 @@ def print_transactions(transactions):
 
 
 def print_date_transactions(transactions):
-    ''' print the summary date transactions in a nice format'''
+    ''' print the summary date transactions in a nice format
+        author: Haipeng Zhu'''
     if len(transactions)==0:
         print('No transactions found')
         return
@@ -52,7 +51,8 @@ def print_date_transactions(transactions):
         print("%-10s %-10s"%values)
 
 def print_category_transactions(transactions):
-    ''' print the summary category transactions in a nice format'''
+    ''' print the summary category transactions in a nice format
+        author: Haipeng Zhu'''
     if len(transactions)==0:
         print('No transactions found')
         return
