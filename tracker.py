@@ -11,7 +11,9 @@ from transaction import Transaction
 # here are some helper functions ...
 
 def print_usage():
-    ''' print an explanation of how to use this command '''
+    ''' print an explanation of how to use this command 
+        Author: Yuxiang Wan
+    '''
     print('''Enter your command and arguments (if any):
             [1] quit
             [2] show_transactions
@@ -27,7 +29,9 @@ def print_usage():
 
 
 def print_transactions(transactions):
-    ''' print the transactions in a nice format'''
+    ''' print the transactions in a nice format
+         Author: Yuxiang Wan
+    '''
     if len(transactions)==0:
         print('No transactions found')
         return
@@ -40,7 +44,9 @@ def print_transactions(transactions):
 
 
 def print_date_transactions(transactions):
-    ''' print the summary date transactions in a nice format'''
+    ''' print the summary date transactions in a nice format
+         Author: Yuxiang Wan
+    '''
     if len(transactions)==0:
         print('No transactions found')
         return
@@ -52,7 +58,9 @@ def print_date_transactions(transactions):
         print("%-10s %-10s"%values)
 
 def print_category_transactions(transactions):
-    ''' print the summary category transactions in a nice format'''
+    ''' print the summary category transactions in a nice format
+         Author: Yuxiang Wan
+    '''
     if len(transactions)==0:
         print('No transactions found')
         return
@@ -64,7 +72,9 @@ def print_category_transactions(transactions):
         print("%-10s %-10s"%values)
 
 def process_args(arglist):
-    ''' examine args and make appropriate calls to Transaction'''
+    ''' examine args and make appropriate calls to Transaction
+        Author: Yuxiang Wan
+    '''
     # transaction = Transaction('transaction')
     transaction = Transaction(os.getenv('HOME')+'/transaction.db')
     if arglist==[]:
@@ -101,7 +111,9 @@ def process_args(arglist):
 
 
 def toplevel():
-    ''' read the command args and process them'''
+    ''' read the command args and process them
+        Author: Yuxiang Wan
+    '''
     print_usage()
     args = []
     while args!=['']:
