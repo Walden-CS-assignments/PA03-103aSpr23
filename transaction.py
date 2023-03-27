@@ -60,17 +60,20 @@ class Transaction():
             ())
 
     def show_transactions(self):
-        '''return all the transactions inside the table'''
+        '''return all the transactions inside the table
+        author: Yuanhuan Deng'''
         return self.run_query("SELECT rowid, * FROM transactions", ())
 
     def add_transaction(self, item):
-        '''insert new transactions into the table'''
+        '''insert new transactions into the table
+        author: Yuanhuan Deng'''
         return self.run_query("INSERT INTO transactions (amount, category, date, description) \
                              VALUES (?, ?, ?, ?)", (item['amount'], item['category']\
                                                     , item['date'], item['description']))
 
     def delete_transaction(self, rowid):
-        '''delete a transaction of the table'''
+        '''delete a transaction of the table
+        author: Yuanhuan Deng'''
         return self.run_query("DELETE FROM transactions WHERE rowid = ?", (rowid,))
 
     def summarize_transactions_by_date(self):
