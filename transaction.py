@@ -45,7 +45,6 @@ def tuples_to_dicts(tuples):
 
 class Transaction():
     ''' Transaction is an Object Relational Mapping to the transaction database '''
-
     def __init__(self, dbname):
         self.dbname = dbname
         self.run_query(

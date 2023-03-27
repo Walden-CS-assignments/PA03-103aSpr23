@@ -8,7 +8,8 @@ from transaction import Transaction, to_dict, tuples_to_dicts
 
 @pytest.fixture
 def tuples():
-    " create some tuples to put in the database "
+    '''create some tuples to put in the database 
+        author: Haipeng Zhu'''
     return [(5, "category1", "2021-03-01", "description1"),
             (6, "category2", "2021-03-01", "description2"),
             (7, "category3", "2021-03-01", "description3"),
@@ -25,17 +26,20 @@ def tuples():
 
 @pytest.fixture
 def returned_tuples(tuples):
-    " add a rowid to the beginning of each tuple "
+    '''add a rowid to the beginning of each tuple
+        author: Haipeng Zhu'''
     return [(i+1,)+tuples[i] for i in range(len(tuples))]
 
 @pytest.fixture
 def returned_dicts(tuples):
-    " add a rowid to the beginning of each tuple "
+    '''add a rowid to the beginning of each tuple
+        author: Haipeng Zhu'''
     return tuples_to_dicts([(i+1,)+tuples[i] for i in range(len(tuples))])
 
 @pytest.fixture
 def transaction_path(tmp_path):
-    " return the path to the transaction.db database "
+    '''return the path to the transaction.db database
+        author: Haipeng Zhu'''
     yield tmp_path / 'transaction.db'
 
 @pytest.fixture(autouse=True)
